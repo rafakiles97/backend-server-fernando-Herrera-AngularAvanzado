@@ -1,6 +1,10 @@
 // Requires
-var express = require('express');
 var mongoose = require('mongoose');
+var express = require('express');
+var bodyParser = require('body-parser');
+
+var appRoutes = require('./routes/app');
+var usuarioRoutes = require('./routes/usuario');
 
 // Inicializar las variables
 var app = express();
@@ -11,23 +15,19 @@ mongoose.connection.openUri('mongodb://localhost:27017/HospitalDB', (err, res) =
   if (!err) {
     console.log(
       'Base de datos enlanzada en el puerto ' + PORT + ' \x1b[32m%s\x1b[0m', ' online'
-    );/*
-    res.status(200).json({
-      ok: true,
-      mensaje: 'Conexión realizada correctamente',
-    });*/
+    );
   } else {
     throw err;
   }
 });
 
-// Rutas
-app.get('/', (req, res, next) => {
-  res.status(200).json({
-    ok: true,
-    mensaje: 'Petición realizada correctamente',
-  });
-});
+// Config Rutas
+app.use('/usuario', usuarioRoutes);
+app.use('/', appRoutes);
+
+// Config BodyParser
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // Escuchar peticiones
 app.listen(PORT, () => {
