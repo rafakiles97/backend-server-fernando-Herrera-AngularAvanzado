@@ -5,7 +5,7 @@ var app = express();
 var Usuario = require('../models/usuario');
 
 // Obtener todos los usuarios
-app.get('/usuario', (req, res, next) => {
+app.get('/usuario', (req, res) => {
   Usuario.find({}, 'nombre email img role'.exec((err, usuarios) => {
     if (!err) {
       res.status(200).json({
@@ -32,7 +32,6 @@ app.post('/', (req, res) => {
     img: bodu.img,
     role: body.role,
   });
-
   usuario.save((err, usuarioGuardado) => {
     if (err) {
       res.status(500).json({
