@@ -10,20 +10,30 @@ var Usuario = require('../models/usuario');
 // Obtener todos los usuarios
 app.get('/usuarios', (req, res) => {
   console.log('Estoy dentro GET /usuario');
-  Usuario.find({}, 'nombre email img role').exec((err, usuarios) => {
-    if (!err) {
-      res.status(200).json({
-        ok: true,
-        usuarios: usuarios,
-      });
-    } else {
-      res.status(500).json({
-        ok: false,
-        mensaje: 'Error cargando usuarios',
-        errors: err,
-      });
-    };
-  });
+
+  var desde = req.query.desde || 0;
+  desde = Number(desde);
+
+  Usuario.find({}, 'nombre email img role')
+    .skip(desde)
+    .limit(5)
+    .exec((err, usuarios) => {
+      if (!err) {
+        Usuario.count({}, (err, conteo) => {
+          res.status(200).json({
+            ok: true,
+            usuarios: usuarios,
+            total: conteo,
+          });
+        });
+      } else {
+        res.status(500).json({
+          ok: false,
+          mensaje: 'Error cargando usuarios',
+          errors: err,
+        });
+      };
+    });
 });
 
 // Actualizar los datos de un usuario
