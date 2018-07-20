@@ -8,7 +8,7 @@ var Medico = require('../models/medico');
 // Obtener todos los medicos
 app.get('/medicos', (req, res) => {
   console.log('Estoy dentro GET /medicos');
-  Medico.find({}).exec((err, medicos) => {
+  Medico.find({}).populate('usuario', 'nombre email').exec((err, medicos) => {
     if (!err) {
       res.status(200).json({
         ok: true,

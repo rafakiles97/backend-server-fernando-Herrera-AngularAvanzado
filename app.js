@@ -2,6 +2,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var cors = require('cors');
 
 var appRoutes = require('./routes/app');
 var loginRoutes = require('./routes/login');
@@ -27,6 +28,9 @@ mongoose.connection.openUri('mongodb://localhost:27017/HospitalDB', (err, res) =
 // Config Bodyparser - parse application/x-www-form-urlencoded
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Config Cors
+app.use(cors());
 
 // Config Rutas
 app.use('/', appRoutes);

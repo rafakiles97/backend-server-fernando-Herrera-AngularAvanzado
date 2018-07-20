@@ -8,7 +8,7 @@ var Hospital = require('../models/hospital');
 // Obtener todos los hospitales
 app.get('/hospitales', (req, res) => {
   console.log('Estoy dentro GET /hospital');
-  Hospital.find({}).exec((err, hospitales) => {
+  Hospital.find({}).populate('usuario', 'nombre email').exec((err, hospitales) => {
     if (!err) {
       res.status(200).json({
         ok: true,
